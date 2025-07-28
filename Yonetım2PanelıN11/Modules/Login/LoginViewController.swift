@@ -1,9 +1,6 @@
-//
-//  LoginViewController.swift
-//  Yonetım2PanelıN11
-//
-//  Created by alime.kilinc on 24.07.2025.
-//
+// 1.
+// kullanıcıdan email inputunu al
+//butona basınca presenter.loginButtonTapped() çağrılır
 
 import UIKit
 
@@ -11,17 +8,18 @@ protocol ViewProtocol: AnyObject {
     func showError(message: String)
 }
 class LoginViewController: UIViewController, ViewProtocol {
+    //presenter referansı(VIPER/MVP iletişimi temel noktası)
     var presenter: Presenter!
     @IBOutlet weak var emailBtn: UITextField!
-
-
+    
+    //controller yüklendiğinde çalışır; şu an boş
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
     
+    //butona basınca çalışır.Presenter'a login işlemini başlatmasını söyledi (protocol oriented programming)
     @IBAction func deneme(_ sender: Any) {
-        print("deneme")
         print("presenter is \(String(describing: presenter))")
         let email = emailBtn.text ?? ""
         presenter?.loginButtonTapped()
