@@ -97,8 +97,6 @@ class DashboardViewController: UIViewController, UICollectionViewDataSource {
 //STACK butonlar BİTİŞ
     
     
-    
-    
 //galeri başlığı VE GALERİ BAŞLANGIÇ KISMI
     private let galleryTitleLabel: UILabel = {
         let label = UILabel()
@@ -157,13 +155,12 @@ class DashboardViewController: UIViewController, UICollectionViewDataSource {
         }
     }
     
-    //kayıttakiler butonuna basınca search sayfasına gidebilsin diye:
-    //ViewController butona basınca -> presenter?.didTapKayıttakiler()
-    
+//kayıttakiler butonuna basınca search sayfasına gidebilsin diye:
+//ViewController butona basınca -> presenter?.didTapKayıttakiler()
     @objc func kayittakilerTapped() {
 // *** butona basınca search sayfası açılsın diye:
-            let vc = UIViewController()
-            vc.view.backgroundColor = .red
+            let vc = SearchViewController()
+            vc.view.backgroundColor = .white
             navigationController?.pushViewController(vc, animated: true)
 // ***
            if presenter == nil {
@@ -172,6 +169,19 @@ class DashboardViewController: UIViewController, UICollectionViewDataSource {
                presenter?.didTapKayıttakiler()
            }
     }
+    
+// favoriler butonuna basınca
+    @objc func favoritesButtonTapped() {
+        let favoritesVC = FavoritesModuleBuilder.build()
+        navigationController?.pushViewController(favoritesVC, animated: true)
+        
+        if presenter == nil {
+            print("dd")
+        }else {
+            presenter?.didTapFavorites()
+        }
+    }
+//
     
     //tüm UI elemanlarını ekrana yerleştirmek için
     private func setupUI() {
@@ -203,7 +213,10 @@ class DashboardViewController: UIViewController, UICollectionViewDataSource {
                 // kayıttakiler butonu
                 if item.title == "Kayıttakiler" {
                     buttonWithLabel.button.addTarget(self, action:  #selector(kayittakilerTapped), for: .touchUpInside)
-                                    }
+                }
+                else if item.title == "Favoriler" {
+                    buttonWithLabel.button.addTarget(self, action: #selector(favoritesButtonTapped), for: .touchUpInside)
+                }
                 topButtonStack.addArrangedSubview(buttonWithLabel)
             }
         
@@ -228,6 +241,8 @@ class DashboardViewController: UIViewController, UICollectionViewDataSource {
         bottomButtonStack.distribution = .equalSpacing
         bottomButtonStack.alignment = .center
         bottomButtonStack.translatesAutoresizingMaskIntoConstraints = false
+        
+        
         
         NSLayoutConstraint.activate([
                    profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),

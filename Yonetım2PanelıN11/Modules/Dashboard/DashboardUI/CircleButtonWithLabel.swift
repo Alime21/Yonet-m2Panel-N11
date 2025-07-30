@@ -1,7 +1,6 @@
 //butonların özellikleri
 
 // 1. Buton + altındaki yazıyı bir arada tutan custom view
-
 import UIKit
 public class CircleButtonWithLabel: UIView {
     

@@ -1,20 +1,19 @@
 import UIKit
-
-protocol FavoriViewProtocol: AnyObject {
-    func showFavorites(_ favori: [String])
+protocol FavoritesViewProtocol: AnyObject {
+    func showFavorites(_ favorites: [String]) 
 }
 
-class FavoriViewController: UIViewController, FavoriViewProtocol {
-    
-    var presenter: FavoriViewProtocol?
-    
+class FavoritesViewController: UIViewController, FavoritesViewProtocol {
+
+    var presenter: FavoritesPresenterProtocol?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         presenter?.viewDidLoad()
     }
-    
-    func showFavori(_ favori: [String]) {
+
+    func showFavorites(_ favorites: [String]) {
         
     }
 }

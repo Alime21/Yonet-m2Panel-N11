@@ -5,6 +5,7 @@ import UIKit
 protocol DashboardPresenterProtocol: AnyObject {
     func viewDidLoad()
     func didTapKayıttakiler()
+    func didTapFavorites()
 }
 
 class DashboardPresenter: DashboardPresenterProtocol {
@@ -27,11 +28,14 @@ class DashboardPresenter: DashboardPresenterProtocol {
                 print("Presenter.view nil!")
                 return
             }
-            //guard let router = router else {
-              //  print("Presenter.router nil!")
-                //return
-            //}
             router?.navigateToSearch(from: view)
+    }
+    
+    func didTapFavorites() {
+        guard let view = view as? UIViewController else {
+            return
+        }
+        router?.navigateToSearch(from: view)
     }
     
     

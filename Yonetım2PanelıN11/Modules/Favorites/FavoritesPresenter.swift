@@ -1,20 +1,21 @@
-protocol FavoriPresenterProtocol: AnyObject {
+protocol FavoritesPresenterProtocol: AnyObject {
     func viewDidLoad()
 }
 
-class FavoriPresenter: FavoriPresenterProtocol {
-    weak var view: FavoriViewProtocol?
-    var interactor: FavoriInteractorProtocol?
-    var router: FavoriRouterProtocol?
-    
+class FavoritesPresenter: FavoritesPresenterProtocol {
+    weak var view: FavoritesViewProtocol?
+    var interactor: FavoritesInteractorProtocol?
+    var router: FavoritesRouterProtocol?
+
     func viewDidLoad() {
-        interactor?.fetchFavori()
+        interactor?.fetchFavorites()
     }
 }
 
-extension FavoriPresenter: FavoriInteractorOutputProtocol {
-    func didFetchFavori(_ favori: [String]) {
-        view?.showFavorites(<#T##favori: [String]##[String]#>)
+extension FavoritesPresenter: FavoritesInteractorOutputProtocol {
+    func didFetchFavorites(_ favorites: [String]) {
+        view?.showFavorites(favorites)
     }
 }
+
 
