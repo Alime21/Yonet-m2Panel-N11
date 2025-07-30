@@ -1,9 +1,4 @@
-//
-//  GalleryCell.swift
-//  Yonetım2PanelıN11
-//
-//  Created by alime.kilinc on 25.07.2025.
-//
+
 import UIKit
 
 class GalleryCell: UICollectionViewCell {

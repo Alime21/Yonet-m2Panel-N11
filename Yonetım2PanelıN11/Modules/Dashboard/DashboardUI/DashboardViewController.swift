@@ -38,7 +38,7 @@ class DashboardViewController: UIViewController, UICollectionViewDataSource {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Yönetim Paneli"
-        label.font = UIFont.systemFont(ofSize: 40, weight: .semibold)
+        label.font = UIFont.systemFont(ofSize: 30, weight: .semibold)
         label.textColor = UIColor(red: 86/255.0, green: 57/255.0, blue: 172/255.0, alpha: 1.0)
         
         let attributedString = NSMutableAttributedString(string: "Yönetim Paneli")
@@ -58,9 +58,9 @@ class DashboardViewController: UIViewController, UICollectionViewDataSource {
     private let subtitleLabel: UILabel = {
         let label = UILabel()
         label.text = "n11 Kültür"
-        label.font = .systemFont(ofSize: 24)
+        label.font = .systemFont(ofSize: 20)
         label.textColor = UIColor(red: 86/255.0, green: 57/255.0, blue: 172/255.0, alpha: 1.0)
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
@@ -103,7 +103,8 @@ class DashboardViewController: UIViewController, UICollectionViewDataSource {
     private let galleryTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "n11 Galeri"
-        label.font = .boldSystemFont(ofSize: 40)
+        label.font = .boldSystemFont(ofSize: 30)
+        label.textColor = UIColor(red: 86/255.0, green: 57/255.0, blue: 172/255.0, alpha: 1.0)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -144,6 +145,8 @@ class DashboardViewController: UIViewController, UICollectionViewDataSource {
         setupUI()                 //arayüz elemanları ekrana yerleştirmek için
     }
     
+   
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -152,6 +155,22 @@ class DashboardViewController: UIViewController, UICollectionViewDataSource {
             let cellWidth = availableWidth / 2
             layout.itemSize = CGSize(width: cellWidth, height: cellWidth * 0.7)
         }
+    }
+    
+    //kayıttakiler butonuna basınca search sayfasına gidebilsin diye:
+    //ViewController butona basınca -> presenter?.didTapKayıttakiler()
+    
+    @objc func kayittakilerTapped() {
+// *** butona basınca search sayfası açılsın diye:
+            let vc = UIViewController()
+            vc.view.backgroundColor = .red
+            navigationController?.pushViewController(vc, animated: true)
+// ***
+           if presenter == nil {
+               print("Presenter nil, bağlantı yok!")
+           } else {
+               presenter?.didTapKayıttakiler()
+           }
     }
     
     //tüm UI elemanlarını ekrana yerleştirmek için
@@ -165,32 +184,50 @@ class DashboardViewController: UIViewController, UICollectionViewDataSource {
             view.addSubview(mainButtonStack)
             view.addSubview(galleryTitleLabel)
             view.addSubview(collectionView)
+            
         
 
     // Butonlar
         mainButtonStack.addArrangedSubview(topButtonStack)
         mainButtonStack.addArrangedSubview(bottomButtonStack)
-            let topButtons: [(title: String, imageName: String)] = [
-                ("Kayıttakiler", "sech 2"),
-                ("Favoriler","fvr"),
-                ("Görüntülediklerim","grnt")
+        let topButtons: [(title: String, imageName: String,color: UIColor)] = [
+            ("Kayıttakiler", "sech 2",UIColor.systemYellow),
+            ("Favoriler","fvr",UIColor.systemPurple),
+            ("Görüntülenenler","grnt",UIColor.systemYellow)
             ]
+        
             for item in topButtons {
-                let button = DashboardCircleButton(title: item.title)
-                button.setImage(UIImage(named: item.imageName), for: .normal)
-                button.imageView?.contentMode = .scaleAspectFit
-                topButtonStack.addArrangedSubview(button)
+                let buttonWithLabel = CircleButtonWithLabel(title: item.title, imageName: item.imageName,backgroundColor:item.color, size:80)
+            
+                
+                // kayıttakiler butonu
+                if item.title == "Kayıttakiler" {
+                    buttonWithLabel.button.addTarget(self, action:  #selector(kayittakilerTapped), for: .touchUpInside)
+                                    }
+                topButtonStack.addArrangedSubview(buttonWithLabel)
             }
-            let bottomButtons: [(title: String, imageName: String)] = [
-                ("Arkadaşlarım", "frnd"),
-                ("Bu Ay Doğanlar","bday")
+        
+        let bottomButtons: [(title: String, imageName: String,color: UIColor)] = [
+            ("Arkadaşlarım", "frnd",UIColor.systemPurple),
+            ("Bu Ay Doğanlar","bday",UIColor.systemPurple)
             ]
+        
             for item in bottomButtons {
-                let button = DashboardCircleButton(title: item.title)
-                button.setImage(UIImage(named: item.imageName), for:.normal)
-                button.imageView?.contentMode = .scaleAspectFit
-                bottomButtonStack.addArrangedSubview(button)
+                let buttonWithLabel = CircleButtonWithLabel(title: item.title, imageName: item.imageName, backgroundColor: item.color,size: 80)
+                bottomButtonStack.addArrangedSubview(buttonWithLabel)
             }
+        
+        topButtonStack.axis = .horizontal
+        topButtonStack.spacing = 35
+        topButtonStack.distribution = .equalSpacing
+        topButtonStack.alignment = .center
+        topButtonStack.translatesAutoresizingMaskIntoConstraints = false
+     
+        bottomButtonStack.axis = .horizontal
+        bottomButtonStack.spacing = 35
+        bottomButtonStack.distribution = .equalSpacing
+        bottomButtonStack.alignment = .center
+        bottomButtonStack.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
                    profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
@@ -206,14 +243,17 @@ class DashboardViewController: UIViewController, UICollectionViewDataSource {
                    titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15), // left: 15px
                    titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
                 
-                  
-
+        
                    subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
-                   subtitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                
+                   subtitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+                   subtitleLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+                   
+                   
                    mainButtonStack.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 20),
                    mainButtonStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                
+                   
+                   
+            
                    galleryTitleLabel.topAnchor.constraint(equalTo: mainButtonStack.bottomAnchor, constant: 24),
                    galleryTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
 
@@ -223,6 +263,10 @@ class DashboardViewController: UIViewController, UICollectionViewDataSource {
                    collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
                ])
            }
+    
+    
+    
+    
     
    // çıkış yapmak için henüz butonla ilişkili değil sadece tanım
     @objc private func logoutTapped() {

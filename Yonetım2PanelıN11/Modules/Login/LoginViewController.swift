@@ -25,6 +25,8 @@ class LoginViewController: UIViewController, ViewProtocol {
         presenter?.loginButtonTapped()
     }
     
+   
+    
     func showError(message: String) {
         let alert = UIAlertController(title: "Hata", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Tamam", style: .default))
