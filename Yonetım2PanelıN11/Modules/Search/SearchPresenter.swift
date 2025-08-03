@@ -12,19 +12,32 @@ class SearchPresenter: SearchPresenterProtocol {
     var router: SearchRouterProtocol?
     
     func performSearch(with query: String) {
-        print("searching for: \(query)")
         interactor?.search(query: query)
     }
     
     func viewDidLoad() {
-        print("search ekranı açıldıf")
-        interactor?.fetchSearchResults()
+        interactor?.fetchAllUsers()
     }
 }
 
-//ınteractor dan gelen çıktıları burda yakalıyor
+///ınteractor dan gelen verileri burda yakalıyor
 extension SearchPresenter: SearchInteractorOutputProtocol {
-    func didFetchResults(_ results: [String]) {
-        view?.showResults(results)
+    func didFetchAllUsers(_ users: [GitHubUserItem]) {
+        DispatchQueue.main.async {
+            self.view?.showResults(users)
+        }
+    }
+    
+    
+    func didFetchResults(_ results: [GitHubUserItem]) {
+        DispatchQueue.main.async {
+            self.view?.showResults(results)
+        }
+    }
+    
+    func didFail(_ error: String) {
+        DispatchQueue.main.async {
+            self.view?.showError(error)
+        }
     }
 }

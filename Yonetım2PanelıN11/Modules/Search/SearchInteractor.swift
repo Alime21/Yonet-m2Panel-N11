@@ -1,28 +1,45 @@
 import Foundation
 
 protocol SearchInteractorProtocol {
-    func fetchSearchResults()
     func search(query: String)
+    func fetchAllUsers()
 }
 
 protocol SearchInteractorOutputProtocol: AnyObject {
-    func didFetchResults(_ results: [String])
+    func didFetchAllUsers(_ users: [GitHubUserItem])
+    func didFetchResults(_ results: [GitHubUserItem])
+    func didFail(_ errorMessage: String)
 }
 
 class SearchInteractor: SearchInteractorProtocol {
     
     weak var presenter: SearchInteractorOutputProtocol?
+    private var allUsers: [GitHubUserItem] = []
     
-    func search(query: String) { 
-            let filteredResults = ["\(query) sonucu 1", "\(query) sonucu 2"]
-            presenter?.didFetchResults(filteredResults)
+    func search(query: String) {
+        NetworkManager.shared.request(endpoint: .searchUsers(query: query, page: 1, perPage: 20)
+        ) { (result: Result<GitHubSearchResponse, Error>) in
+            switch result {
+            case .success(let response):
+                self.presenter?.didFetchResults(response.items)
+            case .failure(let error):
+                self.presenter?.didFail(error.localizedDescription)
+            }
         }
+    }
     
-    func fetchSearchResults() {
-        // API ÇAĞRISI
-        //ŞİMDİLİK UYDURMA
-        let fakeResults = ["ali","veli","sss","ppp"]
-        presenter?.didFetchResults(fakeResults)
+    func fetchAllUsers() {
+        NetworkManager.shared.request(
+            endpoint: .searchUsers(query: "swift", page: 1, perPage: 10)
+        ) { (result: Result<GitHubSearchResponse, Error>) in
+            switch result {
+            case .success(let response):
+                self.allUsers = response.items
+                self.presenter?.didFetchResults(response.items)
+            case .failure(let error):
+                self.presenter?.didFail(error.localizedDescription)
+            }
+        }
     }
 }
 

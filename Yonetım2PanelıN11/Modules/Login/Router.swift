@@ -6,7 +6,7 @@ protocol RouterProtocol {
 class Router: RouterProtocol {
     //push işlemi: dashboarda yönlendirir
     func navigateToDashboard(from view: UIViewController) {
-        let dashboardVC = DashboardViewController()
+        let dashboardVC = DashboardModuleBuilder.build()
         view.navigationController?.pushViewController(dashboardVC, animated: true)
     }
 }

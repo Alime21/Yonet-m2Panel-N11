@@ -12,10 +12,9 @@ class SearchModuleBuilder {
         presenter.interactor = interactor
         presenter.router = router
         interactor.presenter = presenter
-        
-        interactor.presenter = presenter
-        
+                
         return view
     }
+    
 }
 

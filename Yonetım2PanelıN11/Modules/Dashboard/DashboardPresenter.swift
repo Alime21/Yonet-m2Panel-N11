@@ -24,8 +24,7 @@ class DashboardPresenter: DashboardPresenterProtocol {
     //viewcontrollerdan basılan fonksiyon buraya yönlendirir; burda da presenter router'a yönlendirdi
     func didTapKayıttakiler() {
         print("Presenter didTapKayıttakiler tetiklendi ")
-        guard let view = view as? UIViewController else {
-                print("Presenter.view nil!")
+        guard let view = view else {
                 return
             }
             router?.navigateToSearch(from: view)
