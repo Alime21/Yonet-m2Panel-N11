@@ -7,6 +7,7 @@ import UIKit
 protocol ViewProtocol: AnyObject {
     func showError(message: String)
 }
+
 class LoginViewController: UIViewController, ViewProtocol {
     //presenter referansı(VIPER/MVP iletişimi temel noktası)
     var presenter: Presenter!
@@ -24,8 +25,6 @@ class LoginViewController: UIViewController, ViewProtocol {
         let email = emailBtn.text ?? ""
         presenter?.loginButtonTapped()
     }
-    
-   
     
     func showError(message: String) {
         let alert = UIAlertController(title: "Hata", message: message, preferredStyle: .alert)

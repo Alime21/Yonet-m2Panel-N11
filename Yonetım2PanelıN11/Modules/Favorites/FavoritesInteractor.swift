@@ -12,6 +12,8 @@ class FavoritesInteractor: FavoritesInteractorProtocol {
 
     func fetchFavorites() {
         // Burada API veya local DB'den veri çekilir
+        /*let favorites = FavoritesManager.shared.getFavorites()
+        output?.didFetchFavorites(favorites)*/
         let dummyFavorites = ["Ürün 1", "Ürün 2"]
         output?.didFetchFavorites(dummyFavorites)
     }

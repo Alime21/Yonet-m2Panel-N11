@@ -24,10 +24,9 @@ class SearchPresenter: SearchPresenterProtocol {
 extension SearchPresenter: SearchInteractorOutputProtocol {
     func didFetchAllUsers(_ users: [GitHubUserItem]) {
         DispatchQueue.main.async {
-            self.view?.showResults(users)
+            self.view?.showInitialUsers(users)
         }
     }
-    
     
     func didFetchResults(_ results: [GitHubUserItem]) {
         DispatchQueue.main.async {

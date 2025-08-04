@@ -1,10 +1,3 @@
-//
-//  FavoriModuleBuilder,.swift
-//  Yonetım2PanelıN11
-//
-//  Created by alime.kilinc on 30.07.2025.
-//
-
 import UIKit
 
 class FavoritesModuleBuilder {
@@ -17,9 +10,11 @@ class FavoritesModuleBuilder {
         view.presenter = presenter
         presenter.view = view
         presenter.interactor = interactor
+        /*interactor.output = presenter
+        router.viewController = view*/
         presenter.router = router
         interactor.output = presenter
-
+        
         return view
     }
 }

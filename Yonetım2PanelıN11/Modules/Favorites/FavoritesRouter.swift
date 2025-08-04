@@ -1,9 +1,3 @@
-//
-//  FavoriRouter.swift
-//  Yonetım2PanelıN11
-//
-//  Created by alime.kilinc on 30.07.2025.
-//
 
 import UIKit
 
@@ -12,7 +6,9 @@ protocol FavoritesRouterProtocol: AnyObject {
 }
 
 class FavoritesRouter: FavoritesRouterProtocol {
+    /* weak var viewController: UIViewController? */
+    
     static func createModule() -> UIViewController {
-        return FavoritesModuleBuilder.build()
-    }
+            return FavoritesModuleBuilder.build()
+        }
 }

@@ -1,6 +1,7 @@
 import UIKit
 
 protocol SearchViewProtocol: AnyObject {
+    func showInitialUsers(_ users: [GitHubUserItem])
     func showResults(_ results: [GitHubUserItem])
     func showError(_ message: String)
 }
@@ -8,8 +9,9 @@ protocol SearchViewProtocol: AnyObject {
 class SearchViewController: UIViewController, SearchViewProtocol {
 
     var presenter: SearchPresenterProtocol?
-    private var results: [GitHubUserItem] = []
-    private var allUsers: [GitHubUserItem] = []
+    private var allUsers: [GitHubUserItem] = []   // API den ilk yükleme ile dolcak
+    private var results: [GitHubUserItem] = []   // arama sonuçları
+   
     
     // UI ELEMANLARI
     private lazy var searchContainer: UIView = makeSearchContainer()
@@ -30,6 +32,13 @@ class SearchViewController: UIViewController, SearchViewProtocol {
         setupSearchUI()
         setupCollectionView()
         
+    }
+    
+    func showInitialUsers(_ users: [GitHubUserItem]) {
+        self.allUsers = users
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
     }
     
     private func setupSearchUI() {
@@ -114,6 +123,17 @@ class SearchViewController: UIViewController, SearchViewProtocol {
         func configure(with user: GitHubUserItem) {
             nameLabel.text = user.login
         }
+    
+
+/*
+     // ***** favorileme  *****
+        var favoriteButtonAction: (() -> Void)?
+
+        @objc private func favoriteTapped() {
+            favoriteButtonAction?()
+        }
+ */
+
     }
 
     private func setupActions() {
@@ -176,8 +196,8 @@ class SearchViewController: UIViewController, SearchViewProtocol {
     func showResults(_ results: [GitHubUserItem]) {
         self.results = results
         DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
+                   self.collectionView.reloadData()
+               }
     }
     
     func showError(_ message: String) {
@@ -187,17 +207,18 @@ class SearchViewController: UIViewController, SearchViewProtocol {
  // UITableViewDataSource
     
 extension SearchViewController: UICollectionViewDataSource,UICollectionViewDelegate {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-            return results.isEmpty ? allUsers.count : results.count
-        }
-
-        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserCell", for: indexPath) as? UserCell else {
-                return UICollectionViewCell()
+                return results.isEmpty ? allUsers.count : results.count
             }
-            let user = results.isEmpty ? allUsers[indexPath.row] : results[indexPath.row]
-            cell.configure(with: user)
-            return cell
-        }
+
+            func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserCell", for: indexPath) as? UserCell else {
+                    return UICollectionViewCell()
+                }
+                let user = results.isEmpty ? allUsers[indexPath.row] : results[indexPath.row]
+                cell.configure(with: user)
+                return cell
+            }
 }
 
