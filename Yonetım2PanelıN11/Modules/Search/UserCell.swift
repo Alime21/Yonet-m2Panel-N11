@@ -77,21 +77,22 @@ class UserCell: UICollectionViewCell {
 
     @objc private func favoriteTapped() {
         let isFavorite = FavoriteManager.shared.isFavorite(username: nameLabel.text ?? "")
-        if isFavorite {
-            FavoriteManager.shared.removeFavorite(username: nameLabel.text ?? "")
-            UIView.transition(with: favoriteButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                let imageName = isFavorite ? "heart" : "heart.fill"
-                self.favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
-            })
-        } else {
-            FavoriteManager.shared.addFavorite(username: nameLabel.text ?? "")
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                UIView.transition(with: favoriteButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                    let imageName = isFavorite ? "heart" : "heart.fill"
-                    self.favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
-                })
-            }
-        }
+         if isFavorite {
+         FavoriteManager.shared.removeFavorite(username: nameLabel.text ?? "")
+         UIView.transition(with: favoriteButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
+         let imageName = isFavorite ? "heart" : "heart.fill"
+         self.favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
+         })
+         } else {
+         FavoriteManager.shared.addFavorite(username: nameLabel.text ?? "")
+         DispatchQueue.main.async { [weak self] in
+         guard let self else { return }
+         UIView.transition(with: favoriteButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
+         let imageName = isFavorite ? "heart" : "heart.fill"
+         self.favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
+         })
+         }
+         }
+         
     }
 }

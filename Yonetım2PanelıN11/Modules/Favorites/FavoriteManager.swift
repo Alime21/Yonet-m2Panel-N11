@@ -8,11 +8,11 @@ class FavoriteManager {
 
     private init() {}
 
-    func getFavorites() -> Set<String> { 
+    func getFavorites() -> Set<String> {
         let saved = UserDefaults.standard.array(forKey: key) as? [String] ?? []
         return Set(saved)
     }
-
+    
     func isFavorite(username: String) -> Bool {
         return getFavorites().contains(username)
     }
@@ -21,6 +21,7 @@ class FavoriteManager {
         var favorites = getFavorites()
         favorites.insert(username)
         UserDefaults.standard.set(Array(favorites), forKey: key)
+    
     }
 
     func removeFavorite(username: String) {
@@ -28,4 +29,6 @@ class FavoriteManager {
         favorites.remove(username)
         UserDefaults.standard.set(Array(favorites), forKey: key)
     }
+
+    
 }
