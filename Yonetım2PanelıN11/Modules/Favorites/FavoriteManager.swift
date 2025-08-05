@@ -1,3 +1,6 @@
+import UIKit
+
+/// Favorileme için kullanılan UserDefaults çözümlü favori yönetim sınıfı
 class FavoriteManager {
     static let shared = FavoriteManager()
 
@@ -5,7 +8,7 @@ class FavoriteManager {
 
     private init() {}
 
-    func getFavorites() -> Set<String> {
+    func getFavorites() -> Set<String> { 
         let saved = UserDefaults.standard.array(forKey: key) as? [String] ?? []
         return Set(saved)
     }

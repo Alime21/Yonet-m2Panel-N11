@@ -23,36 +23,9 @@ class FavoritesViewController: UIViewController, FavoritesViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        //title = "Favoriler"
-        
-       /* collectionView.dataSource = self
-        collectionView.register(UserCell.self, forCellWithReuseIdentifier: "UserCell")
-        collectionView.frame = view.bounds
-        view.addSubview(collectionView)  */
-        
         presenter?.viewDidLoad()
     }
-    
-   /* func showFavorites(_ favorites: [GitHubUserItem]) {
-       self.users = favorites
-        collectionView.reloadData()
-        
-    } */
 }
     
-/* extension FavoritesViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return users.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserCell", for: indexPath) as? UserCell else {
-            return UICollectionViewCell()
-        }
-        
-        let user = users[indexPath.item]
-        cell.configure(with: user) // UserCell içinde configure fonksiyonun olmalı
-        return cell
-    }
-} */
+
 

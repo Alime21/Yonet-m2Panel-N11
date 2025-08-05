@@ -179,11 +179,11 @@ class DashboardViewController: UIViewController,  UICollectionViewDataSource {
         let favoritesVC = FavoritesModuleBuilder.build()
         navigationController?.pushViewController(favoritesVC, animated: true)
         
-        if presenter == nil {
-            print("dd")
-        }else {
-            presenter?.didTapFavorites()
-        }
+//        if presenter == nil {
+//            print("dd")
+//        }else {
+//            presenter?.didTapFavorites()
+//        }
     }
     
     /// çıkış yapmak için henüz butonla ilişkili değil sadece tanım

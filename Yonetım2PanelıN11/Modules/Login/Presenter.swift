@@ -11,6 +11,7 @@ protocol PresenterProtocol: AnyObject {
     var router: RouterProtocol? { get set }
     
     func loginButtonTapped()
+    func handleGitHubCallback(code: String)
 }
 //hem View'dan gelen tetikleyici hem de Interactor'den gelen sonucu işleyen sınıf
 class Presenter: PresenterProtocol, InteractorOutputProtocol {
@@ -19,10 +20,27 @@ class Presenter: PresenterProtocol, InteractorOutputProtocol {
       var interactor: InteractorProtocol?
       var router: RouterProtocol?
       
-    //!!!!!kullanıcıdan gelen email bilgisi şimdilik sabit; sonra view'dan email parametresi alıcam -> (email: email) ve viewcontroller içine presenter?.loginButtonTapped(email: email) bunu yazcam
-      func loginButtonTapped() {
-          interactor?.login(email: "test@example.com")
-      }
+      private let clientID = "Ov23liNGUQCWIoZtxjGj"
+      private let clientSecret = "5140f3def41cfc5be99377e126e0ca9d693f55a3"
+      private let redirectURI = "myapp://oauth-callback"
+        
+    
+    func loginButtonTapped() {
+        let scope = "user"
+        
+        let authURLString = "https://github.com/login/oauth/authorize?client_id=\(clientID)&scope=\(scope)&redirect_uri=\(redirectURI)"
+        
+        guard let url = URL(string: authURLString) else {
+            view?.showError(message: "URL oluşturulamadı")
+            return
+        }
+        view?.openSafariAuth(url: url)
+    }
+    
+     func handleGitHubCallback(code: String) {
+           interactor?.exchangeCodeForToken(code: code, clientID: clientID, clientSecret: clientSecret, redirectURI: redirectURI)
+       }
+    
     //başarılı ise Dashboard; değilse View uyarılır
       func loginSucceeded() {
           print("login başarılı")
@@ -32,7 +50,7 @@ class Presenter: PresenterProtocol, InteractorOutputProtocol {
       }
     
       func loginFailed(error: String) {
-          print("Login hatalı: \(error)")
+          view?.showError(message: error)
       }
 }
 

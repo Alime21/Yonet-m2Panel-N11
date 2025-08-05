@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C443A0FE2E42160B000B35E8 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C443A0FD2E42160B000B35E8 /* Kingfisher */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		C4ECE28B2E321D8D00880FA7 /* Yonetım2PanelıN11.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Yonetım2PanelıN11.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C443A0FE2E42160B000B35E8 /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = "Yonetım2PanelıN11";
 			packageProductDependencies = (
+				C443A0FD2E42160B000B35E8 /* Kingfisher */,
 			);
 			productName = "Yonetım2PanelıN11";
 			productReference = C4ECE28B2E321D8D00880FA7 /* Yonetım2PanelıN11.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = C4ECE2822E321D8D00880FA7;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C443A0FC2E42160B000B35E8 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C4ECE28C2E321D8D00880FA7 /* Products */;
 			projectDirPath = "";
@@ -333,6 +342,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C443A0FC2E42160B000B35E8 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.5.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C443A0FD2E42160B000B35E8 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C443A0FC2E42160B000B35E8 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C4ECE2832E321D8D00880FA7 /* Project object */;
 }

@@ -3,26 +3,27 @@
 //butona basınca presenter.loginButtonTapped() çağrılır
 
 import UIKit
+import SafariServices
 
 protocol ViewProtocol: AnyObject {
     func showError(message: String)
+    func openSafariAuth(url: URL)
 }
 
 class LoginViewController: UIViewController, ViewProtocol {
     //presenter referansı(VIPER/MVP iletişimi temel noktası)
-    var presenter: Presenter!
+    var presenter: PresenterProtocol!
     @IBOutlet weak var emailBtn: UITextField!
     
     //controller yüklendiğinde çalışır; şu an boş
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
     }
     
     //butona basınca çalışır.Presenter'a login işlemini başlatmasını söyledi (protocol oriented programming)
     @IBAction func deneme(_ sender: Any) {
-        print("presenter is \(String(describing: presenter))")
-        let email = emailBtn.text ?? ""
         presenter?.loginButtonTapped()
     }
     
@@ -32,4 +33,13 @@ class LoginViewController: UIViewController, ViewProtocol {
                 present(alert, animated: true)
     }
     
+    func openSafariAuth(url: URL) {
+        let safariVC = SFSafariViewController(url: url)
+        present(safariVC, animated: true)
+    }
+    
+    /// AppDelegate veya SceneDelegate'den çağrılmalı
+    func handleGitHubCallback(code: String) {
+        presenter.handleGitHubCallback(code: code)
+    }
 }

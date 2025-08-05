@@ -31,6 +31,8 @@ class NetworkManager {
             do {
                 let decoded = try JSONDecoder().decode(T.self, from: data)
                 print("✅ Decode Başarılı")
+                print(data, "data here")
+                print(decoded, "decoded here")
                 completion(.success(decoded))
             } catch {
                 print("❌ Decode Hatası:", error)

@@ -1,48 +1,97 @@
 import UIKit
+import Kingfisher
 
-/*class UserCell: UICollectionViewCell {
+class UserCell: UICollectionViewCell {
+    
     private let nameLabel = UILabel()
-    private let heartIcon = UIImageView()
+    private let avatarButton = UIButton()  // Kullanıcının avatarı burada gösterilecek (arka plan olarak)
+    private let favoriteButton = UIButton(type: .system) // Kalp butonu
+    var userName: String = ""
+    
+    var favoriteButtonAction: (() -> Void)? // Callback
     
     override init(frame: CGRect) {
-            super.init(frame: frame)
-            contentView.backgroundColor = .lightGray
-            contentView.layer.cornerRadius = 12
-            contentView.clipsToBounds = true
+        super.init(frame: frame)
+        setupViews()
+        setupConstraints()
+    }
 
-            nameLabel.translatesAutoresizingMaskIntoConstraints = false
-            heartIcon.translatesAutoresizingMaskIntoConstraints = false
-            heartIcon.tintColor = .red
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
-            contentView.addSubview(nameLabel)
-            contentView.addSubview(heartIcon)
+    private func setupViews() {
+        contentView.backgroundColor = .white
+        contentView.layer.cornerRadius = 12
+        contentView.clipsToBounds = true
 
-            NSLayoutConstraint.activate([
-                heartIcon.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-                heartIcon.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-                heartIcon.widthAnchor.constraint(equalToConstant: 20),
-                heartIcon.heightAnchor.constraint(equalToConstant: 20),
+        nameLabel.font = .systemFont(ofSize: 14, weight: .medium)
+        nameLabel.textAlignment = .center
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
 
-                nameLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-                nameLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
-            ])
+        avatarButton.translatesAutoresizingMaskIntoConstraints = false
+        avatarButton.clipsToBounds = true
+        avatarButton.layer.cornerRadius = 12
+        avatarButton.imageView?.contentMode = .scaleAspectFill
+        avatarButton.isUserInteractionEnabled = false // Sadece görsel amaçlı
+
+        favoriteButton.setImage(UIImage(systemName: "heart"), for: .normal)
+        favoriteButton.tintColor = .red
+        favoriteButton.translatesAutoresizingMaskIntoConstraints = false
+        favoriteButton.addTarget(self, action: #selector(favoriteTapped), for: .touchUpInside)
+
+        contentView.addSubview(avatarButton)
+        contentView.addSubview(nameLabel)
+        contentView.addSubview(favoriteButton)
+    }
+
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            avatarButton.topAnchor.constraint(equalTo: contentView.topAnchor),
+            avatarButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            avatarButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            avatarButton.heightAnchor.constraint(equalTo: avatarButton.widthAnchor), // Kare yap
+
+            nameLabel.topAnchor.constraint(equalTo: avatarButton.bottomAnchor, constant: 8),
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -4),
+            nameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+
+            favoriteButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            favoriteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            favoriteButton.widthAnchor.constraint(equalToConstant: 24),
+            favoriteButton.heightAnchor.constraint(equalToConstant: 24)
+        ])
+    }
+
+    func configure(with user: GitHubUserItem) {
+        nameLabel.text = user.login
+
+        if let url = URL(string: user.avatar_url) {
+            avatarButton.kf.setBackgroundImage(with: url, for: .normal)
         }
 
-        required init?(coder: NSCoder) { fatalError() }
+        let heartImageName = user.isFavorite ? "heart.fill" : "heart"
+        favoriteButton.setImage(UIImage(systemName: heartImageName), for: .normal)
+    }
 
-        func configure(with user: GitHubUserItem) {
-            nameLabel.text = user.login
-            heartIcon.image = UIImage(systemName: user.isFavorite ? "heart.fill" : "heart")
-        }
-
-        var favoriteButtonAction: (() -> Void)?
-
-        override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-            let location = touches.first?.location(in: contentView) ?? .zero
-            if heartIcon.frame.contains(location) {
-                favoriteButtonAction?()
+    @objc private func favoriteTapped() {
+        let isFavorite = FavoriteManager.shared.isFavorite(username: nameLabel.text ?? "")
+        if isFavorite {
+            FavoriteManager.shared.removeFavorite(username: nameLabel.text ?? "")
+            UIView.transition(with: favoriteButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                let imageName = isFavorite ? "heart" : "heart.fill"
+                self.favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
+            })
+        } else {
+            FavoriteManager.shared.addFavorite(username: nameLabel.text ?? "")
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                UIView.transition(with: favoriteButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                    let imageName = isFavorite ? "heart" : "heart.fill"
+                    self.favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
+                })
             }
         }
+    }
 }
-
-*/
