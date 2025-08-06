@@ -13,7 +13,7 @@ class FavoritesPresenter: FavoritesPresenterProtocol {
 }
 
 extension FavoritesPresenter: FavoritesInteractorOutputProtocol {
-    func didFetchFavorites(_ favorites: [String]) {
+    func didFetchFavorites(_ favorites: [GitHubUserItem]) {
         view?.showFavorites(favorites)
     }
 }

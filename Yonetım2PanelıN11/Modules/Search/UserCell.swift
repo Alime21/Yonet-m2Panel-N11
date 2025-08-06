@@ -7,7 +7,8 @@ class UserCell: UICollectionViewCell {
     private let avatarButton = UIButton()  // Kullanıcının avatarı burada gösterilecek (arka plan olarak)
     private let favoriteButton = UIButton(type: .system) // Kalp butonu
     var userName: String = ""
-    
+// ekledik
+    var avatarURL: String = ""
     var favoriteButtonAction: (() -> Void)? // Callback
     
     override init(frame: CGRect) {
@@ -50,7 +51,7 @@ class UserCell: UICollectionViewCell {
             avatarButton.topAnchor.constraint(equalTo: contentView.topAnchor),
             avatarButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             avatarButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            avatarButton.heightAnchor.constraint(equalTo: avatarButton.widthAnchor), // Kare yap
+           // avatarButton.heightAnchor.constraint(equalTo: avatarButton.widthAnchor),
 
             nameLabel.topAnchor.constraint(equalTo: avatarButton.bottomAnchor, constant: 8),
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
@@ -64,7 +65,7 @@ class UserCell: UICollectionViewCell {
         ])
     }
 
-    func configure(with user: GitHubUserItem) {
+    /*func configure(with user: GitHubUserItem) {
         nameLabel.text = user.login
 
         if let url = URL(string: user.avatar_url) {
@@ -73,9 +74,22 @@ class UserCell: UICollectionViewCell {
 
         let heartImageName = user.isFavorite ? "heart.fill" : "heart"
         favoriteButton.setImage(UIImage(systemName: heartImageName), for: .normal)
+    } */
+    
+    func configure(with user: GitHubUserItem) {
+        nameLabel.text = user.login
+        userName = user.login
+        avatarURL = user.avatar_url
+
+        if let url = URL(string: user.avatar_url) {
+            avatarButton.kf.setBackgroundImage(with: url, for: .normal)
+        }
+
+        let heartImageName = FavoriteManager.shared.isFavorite(username: user.login) ? "heart.fill" : "heart"
+        favoriteButton.setImage(UIImage(systemName: heartImageName), for: .normal)
     }
 
-    @objc private func favoriteTapped() {
+   /* @objc private func favoriteTapped() {
         let isFavorite = FavoriteManager.shared.isFavorite(username: nameLabel.text ?? "")
          if isFavorite {
          FavoriteManager.shared.removeFavorite(username: nameLabel.text ?? "")
@@ -94,5 +108,36 @@ class UserCell: UICollectionViewCell {
          }
          }
          
+    }*/
+    
+    @objc private func favoriteTapped() {
+        guard let username = nameLabel.text else { return }
+        let isFavorite = FavoriteManager.shared.isFavorite(username: nameLabel.text ?? "")
+        
+        if FavoriteManager.shared.isFavorite(username: username) {
+            FavoriteManager.shared.removeFavorite(username: username)
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                UIView.transition(with: favoriteButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                    let imageName = isFavorite ? "heart" : "heart.fill"
+                    self.favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
+                })
+            }
+        } else {
+            // Favoriye eklemek için kullanıcıyı tanımlı şekilde geçir
+            let user = GitHubUserItem(login: username, avatar_url: avatarURL)
+            FavoriteManager.shared.addFavorite(user: user)
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                UIView.transition(with: favoriteButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                    let imageName = isFavorite ? "heart" : "heart.fill"
+                    self.favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
+                })
+            }
+        }
+
+        favoriteButtonAction?()
     }
+
 }
+// BU SON COMMİT CHECK
