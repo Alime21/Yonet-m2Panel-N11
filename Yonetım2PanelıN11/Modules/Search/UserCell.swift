@@ -7,7 +7,6 @@ class UserCell: UICollectionViewCell {
     private let avatarButton = UIButton()  // Kullanıcının avatarı burada gösterilecek (arka plan olarak)
     private let favoriteButton = UIButton(type: .system) // Kalp butonu
     var userName: String = ""
-// ekledik
     var avatarURL: String = ""
     var favoriteButtonAction: (() -> Void)? // Callback
     
@@ -64,17 +63,6 @@ class UserCell: UICollectionViewCell {
             favoriteButton.heightAnchor.constraint(equalToConstant: 24)
         ])
     }
-
-    /*func configure(with user: GitHubUserItem) {
-        nameLabel.text = user.login
-
-        if let url = URL(string: user.avatar_url) {
-            avatarButton.kf.setBackgroundImage(with: url, for: .normal)
-        }
-
-        let heartImageName = user.isFavorite ? "heart.fill" : "heart"
-        favoriteButton.setImage(UIImage(systemName: heartImageName), for: .normal)
-    } */
     
     func configure(with user: GitHubUserItem) {
         nameLabel.text = user.login
@@ -88,27 +76,6 @@ class UserCell: UICollectionViewCell {
         let heartImageName = FavoriteManager.shared.isFavorite(username: user.login) ? "heart.fill" : "heart"
         favoriteButton.setImage(UIImage(systemName: heartImageName), for: .normal)
     }
-
-   /* @objc private func favoriteTapped() {
-        let isFavorite = FavoriteManager.shared.isFavorite(username: nameLabel.text ?? "")
-         if isFavorite {
-         FavoriteManager.shared.removeFavorite(username: nameLabel.text ?? "")
-         UIView.transition(with: favoriteButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
-         let imageName = isFavorite ? "heart" : "heart.fill"
-         self.favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
-         })
-         } else {
-         FavoriteManager.shared.addFavorite(username: nameLabel.text ?? "")
-         DispatchQueue.main.async { [weak self] in
-         guard let self else { return }
-         UIView.transition(with: favoriteButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
-         let imageName = isFavorite ? "heart" : "heart.fill"
-         self.favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
-         })
-         }
-         }
-         
-    }*/
     
     @objc private func favoriteTapped() {
         guard let username = nameLabel.text else { return }
@@ -138,6 +105,5 @@ class UserCell: UICollectionViewCell {
 
         favoriteButtonAction?()
     }
-
 }
-// BU SON COMMİT CHECK
+

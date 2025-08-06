@@ -1,10 +1,5 @@
 import Foundation
 
-protocol SearchPresenterProtocol: AnyObject {
-    func performSearch(with query: String)
-    func viewDidLoad()
-}
-
 class SearchPresenter: SearchPresenterProtocol {
     
     weak var view: SearchViewProtocol?

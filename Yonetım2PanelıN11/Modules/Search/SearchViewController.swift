@@ -1,18 +1,11 @@
 import UIKit
 
-protocol SearchViewProtocol: AnyObject {
-    func showInitialUsers(_ users: [GitHubUserItem])
-    func showResults(_ results: [GitHubUserItem])
-    func showError(_ message: String)
-}
-
 class SearchViewController: UIViewController, SearchViewProtocol {
 
     var presenter: SearchPresenterProtocol?
     private var allUsers: [GitHubUserItem] = []   // API den ilk yükleme ile dolcak
     private var results: [GitHubUserItem] = []   // arama sonuçları
    
-    
     // UI ELEMANLARI
     private lazy var searchContainer: UIView = makeSearchContainer()
     private lazy var searchField: UITextField = makeSearchField()
@@ -31,7 +24,6 @@ class SearchViewController: UIViewController, SearchViewProtocol {
     private func setupUI() {
         setupSearchUI()
         setupCollectionView()
-        
     }
     
     func showInitialUsers(_ users: [GitHubUserItem]) {
@@ -62,6 +54,7 @@ class SearchViewController: UIViewController, SearchViewProtocol {
             searchButton.heightAnchor.constraint(equalToConstant: 30)
         ])
     }
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -95,7 +88,6 @@ class SearchViewController: UIViewController, SearchViewProtocol {
     }
     
     // UI BUİLDERs
-    
     private func makeSearchContainer() -> UIView {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -136,7 +128,6 @@ class SearchViewController: UIViewController, SearchViewProtocol {
        }
     
     // ACTIONS
-    
     @objc private func searchButtonTapped() {
         guard let text = searchField.text, !text.isEmpty else {
             print("text boş")
@@ -146,7 +137,6 @@ class SearchViewController: UIViewController, SearchViewProtocol {
     }
     
     // searchviewProtocol
-    
     func showResults(_ results: [GitHubUserItem]) {
         self.results = results
         DispatchQueue.main.async {
@@ -158,8 +148,8 @@ class SearchViewController: UIViewController, SearchViewProtocol {
         print("hatanız: \(message)")
     }
 }
+
  // UITableViewDataSource
-    
 extension SearchViewController: UICollectionViewDataSource,UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

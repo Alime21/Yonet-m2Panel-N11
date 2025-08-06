@@ -5,14 +5,6 @@
 
 import UIKit
 //Presenter'ın View,Interactor ve Roıuter ile nasıl iletişim kurduğunu:
-protocol PresenterProtocol: AnyObject {
-    var view: ViewProtocol? { get set }
-    var interactor: InteractorProtocol? { get set }
-    var router: RouterProtocol? { get set }
-    
-    func loginButtonTapped()
-    func handleGitHubCallback(code: String)
-}
 //hem View'dan gelen tetikleyici hem de Interactor'den gelen sonucu işleyen sınıf
 class Presenter: PresenterProtocol, InteractorOutputProtocol {
       //VIPER bağımlılıkları

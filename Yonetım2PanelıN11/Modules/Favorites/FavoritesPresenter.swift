@@ -1,7 +1,3 @@
-protocol FavoritesPresenterProtocol: AnyObject {
-    func viewDidLoad()
-}
-
 class FavoritesPresenter: FavoritesPresenterProtocol {
     weak var view: FavoritesViewProtocol?
     var interactor: FavoritesInteractorProtocol?

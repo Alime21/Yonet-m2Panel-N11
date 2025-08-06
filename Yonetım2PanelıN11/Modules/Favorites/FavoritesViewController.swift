@@ -1,20 +1,6 @@
 import UIKit
-protocol FavoritesViewProtocol: AnyObject {
-    func showFavorites(_ favorites: [GitHubUserItem])
-}
 
 class FavoritesViewController: UIViewController, FavoritesViewProtocol {
-   /*func showFavorites(_ favorites: [String]) {}
-    
-    var presenter: FavoritesPresenterProtocol?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .white
-        
-        
-        presenter?.viewDidLoad()
-    }*/
     
     var presenter: FavoritesPresenterProtocol?
     var favoriteUsers: [GitHubUserItem] = []
@@ -44,6 +30,7 @@ class FavoritesViewController: UIViewController, FavoritesViewProtocol {
 }
 
 extension FavoritesViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return favoriteUsers.count
     }

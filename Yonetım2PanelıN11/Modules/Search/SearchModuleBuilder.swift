@@ -15,6 +15,5 @@ class SearchModuleBuilder {
                 
         return view
     }
-    
 }
 

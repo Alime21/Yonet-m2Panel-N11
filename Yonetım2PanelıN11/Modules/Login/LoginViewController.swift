@@ -1,15 +1,8 @@
 // 1.
 // kullanıcıdan email inputunu al
 //butona basınca presenter.loginButtonTapped() çağrılır
-
 import UIKit
 import SafariServices
-
-protocol ViewProtocol: AnyObject {
-    func showError(message: String)
-    func openSafariAuth(url: URL)
-}
-
 class LoginViewController: UIViewController, ViewProtocol {
     //presenter referansı(VIPER/MVP iletişimi temel noktası)
     var presenter: PresenterProtocol!
@@ -19,7 +12,6 @@ class LoginViewController: UIViewController, ViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
     }
     
     //butona basınca çalışır.Presenter'a login işlemini başlatmasını söyledi (protocol oriented programming)

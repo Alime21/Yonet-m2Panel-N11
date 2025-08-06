@@ -1,5 +1,4 @@
 import UIKit
-
 ///UICollectionViewDataSource:bu protokol, ccollection viewda kaç hücre olacağını ve hücrelerin nasıl görüneceğini bildirmek için
 class DashboardViewController: UIViewController,  UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -111,7 +110,6 @@ class DashboardViewController: UIViewController,  UICollectionViewDataSource {
         
         mainButtonStack.addArrangedSubview(topButtonStack)
         mainButtonStack.addArrangedSubview(bottomButtonStack)
-        
     }
     
     private func setupButtons() {
@@ -166,8 +164,7 @@ class DashboardViewController: UIViewController,  UICollectionViewDataSource {
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
         ])
     }
-    
-    
+        
     ///kayıttakiler butonuna basınca search sayfasına gidebilsin diye:
     ///ViewController butona basınca -> presenter?.didTapKayıttakiler()
     @objc func kayittakilerTapped() {
@@ -178,12 +175,6 @@ class DashboardViewController: UIViewController,  UICollectionViewDataSource {
     @objc func favoritesButtonTapped() {
         let favoritesVC = FavoritesModuleBuilder.build()
         navigationController?.pushViewController(favoritesVC, animated: true)
-        
-//        if presenter == nil {
-//            print("dd")
-//        }else {
-//            presenter?.didTapFavorites()
-//        }
     }
     
     /// çıkış yapmak için henüz butonla ilişkili değil sadece tanım

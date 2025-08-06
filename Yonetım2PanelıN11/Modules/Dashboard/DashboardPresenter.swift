@@ -2,12 +2,6 @@
 import Foundation
 import UIKit
 
-protocol DashboardPresenterProtocol: AnyObject {
-    func viewDidLoad()
-    func didTapKayıttakiler()
-    func didTapFavorites()
-}
-
 class DashboardPresenter: DashboardPresenterProtocol {
     
     weak var view: DashboardViewController?
@@ -16,7 +10,6 @@ class DashboardPresenter: DashboardPresenterProtocol {
     
     func viewDidLoad() {
         print("Dashboard loaded.")
-        
         //buradan veri çekmeyi başlat
     }
     

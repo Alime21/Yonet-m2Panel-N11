@@ -1,7 +1,7 @@
 //butonların özellikleri
-
 // 1. Buton + altındaki yazıyı bir arada tutan custom view
 import UIKit
+
 public class CircleButtonWithLabel: UIView {
     
     let label: UILabel = UILabel()
@@ -48,6 +48,5 @@ public class CircleButtonWithLabel: UIView {
             label.widthAnchor.constraint(equalTo: button.widthAnchor),
         ])
     }
-    
     required init?(coder: NSCoder){fatalError("init(coder:) has not been implemented")}
 }

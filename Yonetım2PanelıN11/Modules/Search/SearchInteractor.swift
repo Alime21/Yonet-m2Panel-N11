@@ -1,20 +1,8 @@
 import Foundation
 
-protocol SearchInteractorProtocol {
-    func search(query: String)
-    func fetchAllUsers()
-}
-
-protocol SearchInteractorOutputProtocol: AnyObject {
-    func didFetchAllUsers(_ users: [GitHubUserItem])
-    func didFetchResults(_ results: [GitHubUserItem])
-    func didFail(_ error: String)
-}
-
 class SearchInteractor: SearchInteractorProtocol {
     
     weak var presenter: SearchInteractorOutputProtocol?
-    //private var allUsers: [GitHubUserItem] = []
     
     func search(query: String) {
         NetworkManager.shared.request(endpoint: .searchUsers(query: query, page: 1, perPage: 20)

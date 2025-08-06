@@ -1,3 +1,0 @@
-//indirdiğim görseller
-
-
