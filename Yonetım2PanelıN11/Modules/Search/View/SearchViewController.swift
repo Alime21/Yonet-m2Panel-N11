@@ -1,12 +1,13 @@
 import UIKit
 
 class SearchViewController: UIViewController, SearchViewProtocol {
-    //MARK: Properties
-    var presenter: SearchPresenterProtocol?        ///presenter ile haberleşir MVP
-    private var allUsers: [GitHubUserItem] = []   ///  API den gelen ilk kullanıcılar
-    private var results: [GitHubUserItem] = []   /// arama sonuçlarını buraya koy
-   
-    //MARK: UI Components
+    
+    // MARK: - Properties
+    var presenter: SearchPresenterProtocol?
+    private var allUsers: [GitHubUserItem] = []
+    private var results: [GitHubUserItem] = []
+
+    // MARK: - UI Components
     private lazy var searchContainer: UIView = makeSearchContainer()
     private lazy var searchField: UITextField = makeSearchField()
     private lazy var searchButton: UIButton = makeSearchButton()
@@ -28,7 +29,7 @@ class SearchViewController: UIViewController, SearchViewProtocol {
         return cv
     }()
     
-    //MARK: LIFECYCLE
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -37,52 +38,25 @@ class SearchViewController: UIViewController, SearchViewProtocol {
         setupUI()
         setupActions()
     }
-    
-    //MARK: SETUP
-    /// setupUI() → setupSearchUI() + setupCollectionView()
+
+    // MARK: - Setup UI
     private func setupUI() {
-        setupSearchUI()
-        setupCollectionView()
-    }
-    
-    private func setupSearchUI() {
         view.addSubview(searchContainer)
         searchContainer.addSubview(searchField)
         searchContainer.addSubview(searchButton)
-
-        NSLayoutConstraint.activate([
-            searchContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
-            searchContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            searchContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            searchContainer.heightAnchor.constraint(equalToConstant: 44),
-
-            searchField.leadingAnchor.constraint(equalTo: searchContainer.leadingAnchor, constant: 8),
-            searchField.centerYAnchor.constraint(equalTo: searchContainer.centerYAnchor),
-            searchField.trailingAnchor.constraint(equalTo: searchButton.leadingAnchor, constant: -8),
-
-            searchButton.trailingAnchor.constraint(equalTo: searchContainer.trailingAnchor, constant: -8),
-            searchButton.centerYAnchor.constraint(equalTo: searchContainer.centerYAnchor),
-            searchButton.widthAnchor.constraint(equalToConstant: 40),
-            searchButton.heightAnchor.constraint(equalToConstant: 30)
-        ])
-    }
-    
-    private func setupCollectionView() {
         view.addSubview(collectionView)
-
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: searchContainer.bottomAnchor, constant: 10),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        
+        setupSearchContainerConstraints()
+        setupSearchFieldConstraints()
+        setupSearchButtonConstraints()
+        setupCollectionViewConstraints()
     }
 
     private func setupActions() {
         searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
     }
-    
-    //MARK: ACTIONS
+
+    // MARK: - Actions
     @objc private func searchButtonTapped() {
         guard let text = searchField.text, !text.isEmpty else {
             print("text boş")
@@ -90,9 +64,8 @@ class SearchViewController: UIViewController, SearchViewProtocol {
         }
         presenter?.performSearch(with: text)
     }
-    
-    //MARK: SearchViewProtcol Methods
-    ///ilk kullanıcı listesi geldiğinde gösterir
+
+    // MARK: - SearchViewProtocol
     func showInitialUsers(_ users: [GitHubUserItem]) {
         self.allUsers = users
         DispatchQueue.main.async {
@@ -103,15 +76,51 @@ class SearchViewController: UIViewController, SearchViewProtocol {
     func showResults(_ results: [GitHubUserItem]) {
         self.results = results
         DispatchQueue.main.async {
-                   self.collectionView.reloadData()
-               }
+            self.collectionView.reloadData()
+        }
     }
     
     func showError(_ message: String) {
         print("hatanız: \(message)")
     }
-    
-    // MARK: UI BUİLDERs
+
+    // MARK: - Constraint Methods
+    private func setupSearchContainerConstraints() {
+        NSLayoutConstraint.activate([
+            searchContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
+            searchContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            searchContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            searchContainer.heightAnchor.constraint(equalToConstant: 44)
+        ])
+    }
+
+    private func setupSearchFieldConstraints() {
+        NSLayoutConstraint.activate([
+            searchField.leadingAnchor.constraint(equalTo: searchContainer.leadingAnchor, constant: 8),
+            searchField.centerYAnchor.constraint(equalTo: searchContainer.centerYAnchor),
+            searchField.trailingAnchor.constraint(equalTo: searchButton.leadingAnchor, constant: -8)
+        ])
+    }
+
+    private func setupSearchButtonConstraints() {
+        NSLayoutConstraint.activate([
+            searchButton.trailingAnchor.constraint(equalTo: searchContainer.trailingAnchor, constant: -8),
+            searchButton.centerYAnchor.constraint(equalTo: searchContainer.centerYAnchor),
+            searchButton.widthAnchor.constraint(equalToConstant: 40),
+            searchButton.heightAnchor.constraint(equalToConstant: 30)
+        ])
+    }
+
+    private func setupCollectionViewConstraints() {
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: searchContainer.bottomAnchor, constant: 10),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+
+    // MARK: - UI Builders
     private func makeSearchContainer() -> UIView {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -142,30 +151,21 @@ class SearchViewController: UIViewController, SearchViewProtocol {
         btn.layer.borderColor = UIColor.purple.cgColor
         return btn
     }
-    
-    private func makeTableView() -> UITableView {
-           let tv = UITableView()
-           tv.translatesAutoresizingMaskIntoConstraints = false
-           tv.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-           tv.backgroundColor = .white
-           return tv
-       }
 }
 
-//MARK: CollectionView Delegate & DataSource
-extension SearchViewController: UICollectionViewDataSource,UICollectionViewDelegate {
+// MARK: - UICollectionView Delegate & DataSource
+extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-                return results.isEmpty ? allUsers.count : results.count
-            }
+        return results.isEmpty ? allUsers.count : results.count
+    }
 
-            func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserCell", for: indexPath) as? UserCell else {
-                    return UICollectionViewCell()
-                }
-                let user = results.isEmpty ? allUsers[indexPath.row] : results[indexPath.row]
-                cell.configure(with: user)
-                return cell
-            }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserCell", for: indexPath) as? UserCell else {
+            return UICollectionViewCell()
+        }
+        let user = results.isEmpty ? allUsers[indexPath.row] : results[indexPath.row]
+        cell.configure(with: user)
+        return cell
+    }
 }
-

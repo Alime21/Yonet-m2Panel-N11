@@ -68,16 +68,6 @@ class DashboardViewController: UIViewController,  UICollectionViewDataSource {
         return collection
     }()
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-         return 6
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GalleryCell.identifier, for: indexPath) as! GalleryCell
-            cell.configure(imageName: "glr") /// GalleryCell içinde configure fonksiyonun olmalı
-            return cell
-    }
-    
 //MARK: LIFECYCLE: viewcontrollerin oluşturuluşu ve kapanışına kadar olan tüm aşamalr dizisi
     ///ekran ilk yüklendiğinde çalışan fonksiyon
     override func viewDidLoad() {
@@ -100,6 +90,18 @@ class DashboardViewController: UIViewController,  UICollectionViewDataSource {
             layout.itemSize = CGSize(width: cellWidth, height: cellWidth * 0.7)
         }
     }
+    
+//MARK: UICollectionViewDataSource
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+         return 6
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GalleryCell.identifier, for: indexPath) as! GalleryCell
+            cell.configure(imageName: "glr") /// GalleryCell içinde configure fonksiyonun olmalı
+            return cell
+    }
+    
 //MARK: SETUP METHODS
     private func setupUI() {
         view.addSubviews(
@@ -139,36 +141,73 @@ class DashboardViewController: UIViewController,  UICollectionViewDataSource {
             bottomButtonStack.addArrangedSubview(btn)
         }
     }
+    
+//MARK: Constraint
+    
     private func setupConstraints() {
-        NSLayoutConstraint.activate([
-            profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            profileImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            profileImageView.widthAnchor.constraint(equalToConstant: 90),
-            profileImageView.heightAnchor.constraint(equalToConstant: 90),
-            
-            nameLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 8),
-            nameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            titleLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 16),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
-            
-            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
-            subtitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            
-            mainButtonStack.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 20),
-            mainButtonStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            galleryTitleLabel.topAnchor.constraint(equalTo: mainButtonStack.bottomAnchor, constant: 24),
-            galleryTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            
-            collectionView.topAnchor.constraint(equalTo: galleryTitleLabel.bottomAnchor, constant: 12),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
-        ])
+        setupProfileImageConstraints()
+               setupNameLabelConstraints()
+               setupTitleLabelConstraints()
+               setupSubtitleLabelConstraints()
+               setupMainButtonStackConstraints()
+               setupGalleryTitleLabelConstraints()
+               setupCollectionViewConstraints()
     }
-
+    
+    private func setupProfileImageConstraints() {
+           NSLayoutConstraint.activate([
+               profileImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+               profileImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+               profileImageView.widthAnchor.constraint(equalToConstant: 90),
+               profileImageView.heightAnchor.constraint(equalToConstant: 90)
+           ])
+       }
+       
+       private func setupNameLabelConstraints() {
+           NSLayoutConstraint.activate([
+               nameLabel.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 8),
+               nameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+           ])
+       }
+       
+       private func setupTitleLabelConstraints() {
+           NSLayoutConstraint.activate([
+               titleLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 16),
+               titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+               titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15)
+           ])
+       }
+       
+       private func setupSubtitleLabelConstraints() {
+           NSLayoutConstraint.activate([
+               subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
+               subtitleLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor)
+           ])
+       }
+       
+       private func setupMainButtonStackConstraints() {
+           NSLayoutConstraint.activate([
+               mainButtonStack.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 20),
+               mainButtonStack.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+           ])
+       }
+       
+       private func setupGalleryTitleLabelConstraints() {
+           NSLayoutConstraint.activate([
+               galleryTitleLabel.topAnchor.constraint(equalTo: mainButtonStack.bottomAnchor, constant: 24),
+               galleryTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
+           ])
+       }
+       
+       private func setupCollectionViewConstraints() {
+           NSLayoutConstraint.activate([
+               collectionView.topAnchor.constraint(equalTo: galleryTitleLabel.bottomAnchor, constant: 12),
+               collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+               collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+               collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
+           ])
+       }
+    
 //MARK: Buttons Actions
     @objc func kayittakilerTapped() {
             presenter?.didTapKayıttakiler()          ///ViewController butona basınca -> presenter?.didTapKayıttakiler()

@@ -2,15 +2,18 @@ import UIKit
 import Kingfisher
 
 class UserCell: UICollectionViewCell {
-    //UI Properties
-    private let nameLabel = UILabel()
-    private let avatarButton = UIButton()  // Kullanıcının avatarı
-    private let favoriteButton = UIButton(type: .system) // Kalp butonu
     
+    // MARK: - UI Properties
+    private let nameLabel = UILabel()
+    private let avatarButton = UIButton()
+    private let favoriteButton = UIButton(type: .system)
+
+    // MARK: - Data
     var userName: String = ""
     var avatarURL: String = ""
-    var favoriteButtonAction: (() -> Void)? // dışarıya Callback
+    var favoriteButtonAction: (() -> Void)?
     
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -21,37 +24,43 @@ class UserCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - View Setup
     private func setupViews() {
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 12
         contentView.clipsToBounds = true
 
-        nameLabel.font = .systemFont(ofSize: 14, weight: .medium)
-        nameLabel.textAlignment = .center
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-
+        // Avatar Button
         avatarButton.translatesAutoresizingMaskIntoConstraints = false
         avatarButton.clipsToBounds = true
         avatarButton.layer.cornerRadius = 12
         avatarButton.imageView?.contentMode = .scaleAspectFill
-        avatarButton.isUserInteractionEnabled = false // Sadece görsel amaçlı
+        avatarButton.isUserInteractionEnabled = false
 
+        // Name Label
+        nameLabel.font = .systemFont(ofSize: 14, weight: .medium)
+        nameLabel.textAlignment = .center
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        // Favorite Button
         favoriteButton.setImage(UIImage(systemName: "heart"), for: .normal)
         favoriteButton.tintColor = .red
         favoriteButton.translatesAutoresizingMaskIntoConstraints = false
         favoriteButton.addTarget(self, action: #selector(favoriteTapped), for: .touchUpInside)
 
+        // Add to contentView
         contentView.addSubview(avatarButton)
         contentView.addSubview(nameLabel)
         contentView.addSubview(favoriteButton)
     }
 
+    // MARK: - Constraints Setup
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             avatarButton.topAnchor.constraint(equalTo: contentView.topAnchor),
             avatarButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             avatarButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-           // avatarButton.heightAnchor.constraint(equalTo: avatarButton.widthAnchor),
+            // avatarButton.heightAnchor.constraint(equalTo: avatarButton.widthAnchor), // opsiyonel
 
             nameLabel.topAnchor.constraint(equalTo: avatarButton.bottomAnchor, constant: 8),
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 4),
@@ -64,7 +73,8 @@ class UserCell: UICollectionViewCell {
             favoriteButton.heightAnchor.constraint(equalToConstant: 24)
         ])
     }
-    
+
+    // MARK: - Configuration
     func configure(with user: GitHubUserItem) {
         nameLabel.text = user.login
         userName = user.login
@@ -77,31 +87,25 @@ class UserCell: UICollectionViewCell {
         let heartImageName = FavoriteManager.shared.isFavorite(username: user.login) ? "heart.fill" : "heart"
         favoriteButton.setImage(UIImage(systemName: heartImageName), for: .normal)
     }
-    
+
+    // MARK: - Actions
     @objc private func favoriteTapped() {
         guard let username = nameLabel.text else { return }
-        let isFavorite = FavoriteManager.shared.isFavorite(username: nameLabel.text ?? "")
-        
-        if FavoriteManager.shared.isFavorite(username: username) {
+        let isFavorite = FavoriteManager.shared.isFavorite(username: username)
+
+        if isFavorite {
             FavoriteManager.shared.removeFavorite(username: username)
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                UIView.transition(with: favoriteButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                    let imageName = isFavorite ? "heart" : "heart.fill"
-                    self.favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
-                })
-            }
         } else {
-            // Favoriye eklemek için kullanıcıyı tanımlı şekilde geçir
             let user = GitHubUserItem(login: username, avatar_url: avatarURL)
             FavoriteManager.shared.addFavorite(user: user)
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                UIView.transition(with: favoriteButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
-                    let imageName = isFavorite ? "heart" : "heart.fill"
-                    self.favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
-                })
-            }
+        }
+
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            UIView.transition(with: favoriteButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                let imageName = isFavorite ? "heart" : "heart.fill"
+                self.favoriteButton.setImage(UIImage(systemName: imageName), for: .normal)
+            })
         }
 
         favoriteButtonAction?()
