@@ -26,11 +26,15 @@ class DashboardViewController: UIViewController,  UICollectionViewDataSource {
     }()
     
     ///profil altındaki text
-    private let nameLabel = UILabel.create(text: "B. Mete",font: .boldSystemFont(ofSize: 24), color: UIColor(red: 86/255, green: 57/255, blue: 172/255, alpha: 1))
+    private let nameLabel = UILabel.create(text: "B. Mete",
+                                           font: .boldSystemFont(ofSize: 24),
+                                           color: UIColor(named: "primaryPurple") ?? .black)
     
     ///sayfanın başlığı:  yönetimpaneli
     private let titleLabel: UILabel = {
-        let label = UILabel.create(text: "Yönetim Paneli", font: .systemFont(ofSize: 30, weight: .semibold), color: UIColor(red: 86/255, green: 57/255, blue: 172/255, alpha: 1))
+        let label = UILabel.create(text: "Yönetim Paneli",
+                                   font: .systemFont(ofSize: 30, weight: .semibold),
+                                   color: UIColor(named: "primaryPurple")!)
         let attributed = NSMutableAttributedString(string: "Yönetim Paneli")
         let paragraph = NSMutableParagraphStyle()
         paragraph.lineSpacing = 34 - label.font.lineHeight
@@ -41,7 +45,7 @@ class DashboardViewController: UIViewController,  UICollectionViewDataSource {
     }()
     
     ///yönetim panelinin alt başlığı
-    private let subtitleLabel = UILabel.create(text: "n11 Kültür", font: .systemFont(ofSize: 20), color: UIColor(red: 86/255, green: 57/255, blue: 172/255, alpha: 1))
+    private let subtitleLabel = UILabel.create(text: "n11 Kültür", font: .systemFont(ofSize: 20), color: UIColor(named: "primaryPurple")!)
     
     ///butonlar alt, üst ve ana stackte
     private lazy var topButtonStack = UIStackView.create(axis: .horizontal, spacing: 35, distribution: .fillEqually)
@@ -49,7 +53,7 @@ class DashboardViewController: UIViewController,  UICollectionViewDataSource {
     private lazy var mainButtonStack = UIStackView.create(axis: .vertical, spacing: 12)
     
     /// galeri başlığı
-    private let galleryTitleLabel = UILabel.create(text: "n11 Galeri", font: .boldSystemFont(ofSize: 30), color: UIColor(red: 86/255, green: 57/255, blue: 172/255, alpha: 1))
+    private let galleryTitleLabel = UILabel.create(text: "n11 Galeri", font: .boldSystemFont(ofSize: 30), color: UIColor(named: "primaryPurple")!)
     
     ///n11 galeri altındaki görseller
     private let collectionView: UICollectionView = {
