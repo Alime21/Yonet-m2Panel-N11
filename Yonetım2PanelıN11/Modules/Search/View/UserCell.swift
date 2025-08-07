@@ -2,13 +2,14 @@ import UIKit
 import Kingfisher
 
 class UserCell: UICollectionViewCell {
-    
+    //UI Properties
     private let nameLabel = UILabel()
-    private let avatarButton = UIButton()  // Kullanıcının avatarı burada gösterilecek (arka plan olarak)
+    private let avatarButton = UIButton()  // Kullanıcının avatarı
     private let favoriteButton = UIButton(type: .system) // Kalp butonu
+    
     var userName: String = ""
     var avatarURL: String = ""
-    var favoriteButtonAction: (() -> Void)? // Callback
+    var favoriteButtonAction: (() -> Void)? // dışarıya Callback
     
     override init(frame: CGRect) {
         super.init(frame: frame)

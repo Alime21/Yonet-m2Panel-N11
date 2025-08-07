@@ -1,9 +1,7 @@
+//kullanıcı modelini temsil edr
 struct GitHubUserItem: Codable, Equatable {
-    let login: String
-    let avatar_url: String
-    /*var isFavorite: Bool {
-        return FavoriteManager.shared.isFavorite(username: login)
-    } */
+    let login: String         /// kullanıcı adı
+    let avatar_url: String    /// kullanıcı resmi
     var isFavorite: Bool = false
     
     init(login: String, avatar_url: String, isFavorite: Bool = false) {
@@ -11,13 +9,13 @@ struct GitHubUserItem: Codable, Equatable {
             self.avatar_url = avatar_url
             self.isFavorite = isFavorite
         }
-
     
     enum CodingKeys: String, CodingKey {
             case login
             case avatar_url
             case isFavorite
         }
+    
     init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             login = try container.decode(String.self, forKey: .login)

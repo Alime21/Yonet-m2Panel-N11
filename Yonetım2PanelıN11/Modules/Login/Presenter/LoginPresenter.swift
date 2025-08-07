@@ -1,13 +1,12 @@
-//2.
 //interactor.login(email:) metodunu çağırır
 //giriş başarılı ise router.navigateToDashboard() çağrılır
 //giriş başarısız ise view.showError() çağrılır
 
 import UIKit
-//Presenter'ın View,Interactor ve Roıuter ile nasıl iletişim kurduğunu:
-//hem View'dan gelen tetikleyici hem de Interactor'den gelen sonucu işleyen sınıf
+///Presenter'ın View,Interactor ve Roıuter ile nasıl iletişim kurduğunu:
+///hem View'dan gelen tetikleyici hem de Interactor'den gelen sonucu işleyen sınıf
 class Presenter: PresenterProtocol, InteractorOutputProtocol {
-      //VIPER bağımlılıkları
+      ///VIPER bağımlılıkları
       weak var view: ViewProtocol?
       var interactor: InteractorProtocol?
       var router: RouterProtocol?
@@ -33,7 +32,7 @@ class Presenter: PresenterProtocol, InteractorOutputProtocol {
            interactor?.exchangeCodeForToken(code: code, clientID: clientID, clientSecret: clientSecret, redirectURI: redirectURI)
        }
     
-    //başarılı ise Dashboard; değilse View uyarılır
+    ///başarılı ise Dashboard; değilse View uyarılır
       func loginSucceeded() {
           print("login başarılı")
           if let viewController = view as? UIViewController {

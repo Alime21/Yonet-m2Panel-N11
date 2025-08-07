@@ -1,5 +1,5 @@
+//API’ye istek atar ve sonucu decode eder
 import Foundation
-
 class NetworkManager {
     static let shared = NetworkManager()
     private init() {}

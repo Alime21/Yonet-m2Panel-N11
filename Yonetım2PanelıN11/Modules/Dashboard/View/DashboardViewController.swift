@@ -1,22 +1,12 @@
 import UIKit
 ///UICollectionViewDataSource:bu protokol, ccollection viewda kaç hücre olacağını ve hücrelerin nasıl görüneceğini bildirmek için
 class DashboardViewController: UIViewController,  UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-         return 6
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GalleryCell.identifier, for: indexPath) as! GalleryCell
-            cell.configure(imageName: "glr") /// GalleryCell içinde configure fonksiyonun olmalı
-            return cell
-    }
-    
-    ///manuel başlatma
+    ///manuel başlatma,  storyboard kullanmadan, programatik UI yaptığım için
     init() {
         super.init(nibName: nil, bundle: nil)
         print("SearchViewController init() çağrıldı")
     }
-    
+    ///viewcontroller dan (coder: ) override'i zorunlu yapsın diye
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         print("searchviewcontrolller init(coder:) çağrıldı")
@@ -25,8 +15,8 @@ class DashboardViewController: UIViewController,  UICollectionViewDataSource {
     ///MVP mimarisinden DashboardPresenter'dan (POP)
     var presenter: DashboardPresenterProtocol?
     
-    ///B. Mete kısmı
-    ///yuvarlak kullanıcı profil fotosu
+//MARK: UI Elements
+    ///profil fotosu
     private let profileImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "bmt"))
         imageView.layer.cornerRadius = 45
@@ -35,11 +25,10 @@ class DashboardViewController: UIViewController,  UICollectionViewDataSource {
         return imageView
     }()
     
-    ///kullanıcı adı ve UILabel extension u viewcontrollerin dışında en aşağıda
+    ///profil altındaki text
     private let nameLabel = UILabel.create(text: "B. Mete",font: .boldSystemFont(ofSize: 24), color: UIColor(red: 86/255, green: 57/255, blue: 172/255, alpha: 1))
     
-    
-    ///sayfa başlığı yönetimpaneli UILabel extension u
+    ///sayfanın başlığı:  yönetimpaneli
     private let titleLabel: UILabel = {
         let label = UILabel.create(text: "Yönetim Paneli", font: .systemFont(ofSize: 30, weight: .semibold), color: UIColor(red: 86/255, green: 57/255, blue: 172/255, alpha: 1))
         let attributed = NSMutableAttributedString(string: "Yönetim Paneli")
@@ -51,17 +40,18 @@ class DashboardViewController: UIViewController,  UICollectionViewDataSource {
         return label
     }()
     
-    ///alt başlık  UILabel extension u var
+    ///yönetim panelinin alt başlığı
     private let subtitleLabel = UILabel.create(text: "n11 Kültür", font: .systemFont(ofSize: 20), color: UIColor(red: 86/255, green: 57/255, blue: 172/255, alpha: 1))
     
-    /// buttonstack ler    extension u aşağıda
+    ///butonlar alt, üst ve ana stackte
     private lazy var topButtonStack = UIStackView.create(axis: .horizontal, spacing: 35, distribution: .fillEqually)
     private lazy var bottomButtonStack = UIStackView.create(axis: .horizontal, spacing: 10, distribution: .equalSpacing)
     private lazy var mainButtonStack = UIStackView.create(axis: .vertical, spacing: 12)
     
-    /// galeri başlığı UILabel extensionu var
+    /// galeri başlığı
     private let galleryTitleLabel = UILabel.create(text: "n11 Galeri", font: .boldSystemFont(ofSize: 30), color: UIColor(red: 86/255, green: 57/255, blue: 172/255, alpha: 1))
     
+    ///n11 galeri altındaki görseller
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 3
@@ -74,21 +64,31 @@ class DashboardViewController: UIViewController,  UICollectionViewDataSource {
         return collection
     }()
     
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+         return 6
+    }
     
-    ///ekran ilk yüklendiğinde çalışan fonksiyon  ***Lifecycle***
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GalleryCell.identifier, for: indexPath) as! GalleryCell
+            cell.configure(imageName: "glr") /// GalleryCell içinde configure fonksiyonun olmalı
+            return cell
+    }
+    
+//MARK: LIFECYCLE: viewcontrollerin oluşturuluşu ve kapanışına kadar olan tüm aşamalr dizisi
+    ///ekran ilk yüklendiğinde çalışan fonksiyon
     override func viewDidLoad() {
-        super.viewDidLoad()
+        super.viewDidLoad()        /// view yülendiğinde (sadxece 1 kere çağrılır), UI kurulumu,veri yükleme
         view.backgroundColor = .white
-        collectionView.dataSource = self
+        collectionView.dataSource = self  /// UICollectionViewDataSource protokolünü uygulamamı sağlar
         presenter?.viewDidLoad()  ///presenter a view yüklendi bilgisi
         
         setupUI()                 ///arayüz elemanları ekrana yerleştirmek için
         setupButtons()
-        setupConstraints()
+        setupConstraints()        /// UI elemanlarının ekrandaki konumlarını ayarlamaki içn
     }
     
     override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+        super.viewDidLayoutSubviews()      ///view subviews yerleştiğinde çalışır; frame ve layout ayarlandıktan sonra çağrılır
         
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             let availableWidth = collectionView.bounds.width - layout.sectionInset.left - layout.sectionInset.right - layout.minimumInteritemSpacing
@@ -96,7 +96,7 @@ class DashboardViewController: UIViewController,  UICollectionViewDataSource {
             layout.itemSize = CGSize(width: cellWidth, height: cellWidth * 0.7)
         }
     }
-    
+//MARK: SETUP METHODS
     private func setupUI() {
         view.addSubviews(
             profileImageView,
@@ -164,53 +164,17 @@ class DashboardViewController: UIViewController,  UICollectionViewDataSource {
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
         ])
     }
-        
-    ///kayıttakiler butonuna basınca search sayfasına gidebilsin diye:
-    ///ViewController butona basınca -> presenter?.didTapKayıttakiler()
+
+//MARK: Buttons Actions
     @objc func kayittakilerTapped() {
-            presenter?.didTapKayıttakiler()
+            presenter?.didTapKayıttakiler()          ///ViewController butona basınca -> presenter?.didTapKayıttakiler()
     }
     
-    /// favoriler butonuna basınca
     @objc func favoritesButtonTapped() {
         let favoritesVC = FavoritesModuleBuilder.build()
         navigationController?.pushViewController(favoritesVC, animated: true)
     }
     
     /// çıkış yapmak için henüz butonla ilişkili değil sadece tanım
-    @objc private func logoutTapped() {
-        ///        presenter?.logout()
-    }
-}
-
-extension UILabel {
-    static func create(text: String, font: UIFont, color: UIColor) -> UILabel {
-        let label = UILabel()
-        label.text = text
-        label.font = font
-        label.textColor = color
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }
-}
-
-extension UIView {
-    func addSubviews(_ views: UIView...) {
-        views.forEach { addSubview($0) }
-    }
-}
-
-extension UIStackView {
-    static func create(axis: NSLayoutConstraint.Axis,
-                       spacing: CGFloat,
-                       distribution: UIStackView.Distribution = .equalSpacing,
-                       alignment: UIStackView.Alignment = .center) -> UIStackView {
-        let stack = UIStackView()
-        stack.axis = axis
-        stack.spacing = spacing
-        stack.distribution = distribution
-        stack.alignment = alignment
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        return stack
-    }
+    @objc private func logoutTapped() {}
 }

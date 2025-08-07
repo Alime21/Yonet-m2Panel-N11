@@ -1,3 +1,4 @@
+//API URL lerini üretir
 enum GitHubEndpoint {
     case searchUsers(query: String, page: Int, perPage: Int)
     

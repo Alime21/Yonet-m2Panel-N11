@@ -1,5 +1,5 @@
-//butonların özellikleri
-// 1. Buton + altındaki yazıyı bir arada tutan custom view
+//butonların özellikleri (kayıttakiler,favoriler,geçmiş....)
+// Buton + altındaki yazıyı bir arada tutan custom view
 import UIKit
 
 public class CircleButtonWithLabel: UIView {
@@ -11,8 +11,7 @@ public class CircleButtonWithLabel: UIView {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
 
-        // Button ayarları
-        //let button: UIButton = UIButton(type: .system)
+        /// Button ayarları
         button.setImage(UIImage(named: imageName)?.withRenderingMode(.alwaysOriginal), for: .normal)
         button.tintColor = nil
         button.backgroundColor = backgroundColor
@@ -21,14 +20,14 @@ public class CircleButtonWithLabel: UIView {
         button.imageView?.contentMode = .scaleAspectFit
         button.translatesAutoresizingMaskIntoConstraints = false
 
-        // Label ayarları
+        /// Label ayarları
         label.text = title
         label.font = .systemFont(ofSize: 10)
         label.textAlignment = .center
         label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
 
-        // StackView: Buton ve label dikey olarak
+        /// StackView: Buton ve label dikey olarak
         let stack = UIStackView(arrangedSubviews: [button, label])
         stack.axis = .vertical
         stack.alignment = .center

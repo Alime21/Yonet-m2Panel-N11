@@ -1,17 +1,34 @@
 import UIKit
 
 class SearchViewController: UIViewController, SearchViewProtocol {
-
-    var presenter: SearchPresenterProtocol?
-    private var allUsers: [GitHubUserItem] = []   // API den ilk yükleme ile dolcak
-    private var results: [GitHubUserItem] = []   // arama sonuçları
+    //MARK: Properties
+    var presenter: SearchPresenterProtocol?        ///presenter ile haberleşir MVP
+    private var allUsers: [GitHubUserItem] = []   ///  API den gelen ilk kullanıcılar
+    private var results: [GitHubUserItem] = []   /// arama sonuçlarını buraya koy
    
-    // UI ELEMANLARI
+    //MARK: UI Components
     private lazy var searchContainer: UIView = makeSearchContainer()
     private lazy var searchField: UITextField = makeSearchField()
     private lazy var searchButton: UIButton = makeSearchButton()
     
-    // ***** LIFECYCLE ******
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = 12
+        layout.minimumInteritemSpacing = 12
+        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        layout.itemSize = CGSize(width: (UIScreen.main.bounds.width - 60) / 2, height: 150)
+
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.translatesAutoresizingMaskIntoConstraints = false
+        cv.dataSource = self
+        cv.delegate = self
+        cv.backgroundColor = .white
+        cv.register(UserCell.self, forCellWithReuseIdentifier: "UserCell")
+        return cv
+    }()
+    
+    //MARK: LIFECYCLE
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -21,16 +38,11 @@ class SearchViewController: UIViewController, SearchViewProtocol {
         setupActions()
     }
     
+    //MARK: SETUP
+    /// setupUI() → setupSearchUI() + setupCollectionView()
     private func setupUI() {
         setupSearchUI()
         setupCollectionView()
-    }
-    
-    func showInitialUsers(_ users: [GitHubUserItem]) {
-        self.allUsers = users
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
     }
     
     private func setupSearchUI() {
@@ -55,23 +67,6 @@ class SearchViewController: UIViewController, SearchViewProtocol {
         ])
     }
     
-    private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 12
-        layout.minimumInteritemSpacing = 12
-        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
-        layout.itemSize = CGSize(width: (UIScreen.main.bounds.width - 60) / 2, height: 150)
-
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.translatesAutoresizingMaskIntoConstraints = false
-        cv.dataSource = self
-        cv.delegate = self
-        cv.backgroundColor = .white
-        cv.register(UserCell.self, forCellWithReuseIdentifier: "UserCell")
-        return cv
-    }()
-
     private func setupCollectionView() {
         view.addSubview(collectionView)
 
@@ -87,7 +82,36 @@ class SearchViewController: UIViewController, SearchViewProtocol {
         searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
     }
     
-    // UI BUİLDERs
+    //MARK: ACTIONS
+    @objc private func searchButtonTapped() {
+        guard let text = searchField.text, !text.isEmpty else {
+            print("text boş")
+            return
+        }
+        presenter?.performSearch(with: text)
+    }
+    
+    //MARK: SearchViewProtcol Methods
+    ///ilk kullanıcı listesi geldiğinde gösterir
+    func showInitialUsers(_ users: [GitHubUserItem]) {
+        self.allUsers = users
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+    }
+    
+    func showResults(_ results: [GitHubUserItem]) {
+        self.results = results
+        DispatchQueue.main.async {
+                   self.collectionView.reloadData()
+               }
+    }
+    
+    func showError(_ message: String) {
+        print("hatanız: \(message)")
+    }
+    
+    // MARK: UI BUİLDERs
     private func makeSearchContainer() -> UIView {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -126,30 +150,9 @@ class SearchViewController: UIViewController, SearchViewProtocol {
            tv.backgroundColor = .white
            return tv
        }
-    
-    // ACTIONS
-    @objc private func searchButtonTapped() {
-        guard let text = searchField.text, !text.isEmpty else {
-            print("text boş")
-            return
-        }
-        presenter?.performSearch(with: text)
-    }
-    
-    // searchviewProtocol
-    func showResults(_ results: [GitHubUserItem]) {
-        self.results = results
-        DispatchQueue.main.async {
-                   self.collectionView.reloadData()
-               }
-    }
-    
-    func showError(_ message: String) {
-        print("hatanız: \(message)")
-    }
 }
 
- // UITableViewDataSource
+//MARK: CollectionView Delegate & DataSource
 extension SearchViewController: UICollectionViewDataSource,UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

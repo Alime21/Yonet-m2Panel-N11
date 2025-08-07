@@ -1,5 +1,5 @@
 import Foundation
-
+//URL'den query parametrelerini oku
 extension URL {
     var queryParameters: [String: String]? {
         URLComponents(url: self, resolvingAgainstBaseURL: false)?

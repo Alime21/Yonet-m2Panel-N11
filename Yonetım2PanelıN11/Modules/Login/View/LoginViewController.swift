@@ -1,20 +1,18 @@
-// 1.
 // kullanıcıdan email inputunu al
 //butona basınca presenter.loginButtonTapped() çağrılır
 import UIKit
 import SafariServices
 class LoginViewController: UIViewController, ViewProtocol {
-    //presenter referansı(VIPER/MVP iletişimi temel noktası)
+    ///presenter referansı(VIPER/MVP iletişimi temel noktası)
     var presenter: PresenterProtocol!
     @IBOutlet weak var emailBtn: UITextField!
     
-    //controller yüklendiğinde çalışır; şu an boş
+    ///controller yüklendiğinde çalışır; şu an boş
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
     }
     
-    //butona basınca çalışır.Presenter'a login işlemini başlatmasını söyledi (protocol oriented programming)
+    ///butona basınca çalışır.Presenter'a login işlemini başlatmasını söyledi (protocol oriented programming)
     @IBAction func deneme(_ sender: Any) {
         presenter?.loginButtonTapped()
     }
