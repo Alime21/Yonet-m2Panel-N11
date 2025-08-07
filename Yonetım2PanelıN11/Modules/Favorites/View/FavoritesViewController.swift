@@ -16,6 +16,8 @@ class FavoritesViewController: UIViewController, FavoritesViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        self.title = "Favorilerim"
+        collectionView.backgroundColor = .white
         view.addSubview(collectionView)
         collectionView.delegate = self
         collectionView.dataSource = self
