@@ -68,14 +68,16 @@ class SearchViewController: UIViewController, SearchViewProtocol {
     // MARK: - SearchViewProtocol
     func showInitialUsers(_ users: [GitHubUserItem]) {
         self.allUsers = users
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in // weak self ile işaretlenmezse bellekte overload olur
+            guard let self else { return } // bunu silersen self?. şeklinde kullanım gerekir + güvenli olmaz
             self.collectionView.reloadData()
         }
     }
     
     func showResults(_ results: [GitHubUserItem]) {
         self.results = results
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
             self.collectionView.reloadData()
         }
     }

@@ -18,20 +18,14 @@ class SearchPresenter: SearchPresenterProtocol {
 ///ınteractor dan gelen verileri burda yakalıyor
 extension SearchPresenter: SearchInteractorOutputProtocol {
     func didFetchAllUsers(_ users: [GitHubUserItem]) {
-        DispatchQueue.main.async {
-            self.view?.showInitialUsers(users)
-        }
+        self.view?.showInitialUsers(users)
     }
     
     func didFetchResults(_ results: [GitHubUserItem]) {
-        DispatchQueue.main.async {
-            self.view?.showResults(results)
-        }
+        self.view?.showResults(results)
     }
     
     func didFail(_ error: String) {
-        DispatchQueue.main.async {
-            self.view?.showError(error)
-        }
+        self.view?.showError(error)
     }
 }
